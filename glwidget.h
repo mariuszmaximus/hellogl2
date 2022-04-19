@@ -56,6 +56,7 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QMatrix4x4>
+#include <QPainter>
 #include "logo.h"
 
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
@@ -73,6 +74,14 @@ public:
 
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
+
+    void AssignRot(GLWidget &ob)
+    {
+        m_xRot = ob.m_xRot;
+        m_yRot = ob.m_yRot;
+        m_zRot = ob.m_zRot;
+    }
+    void SaveImg(QString &fileName);
 
 public slots:
     void setXRotation(int angle);

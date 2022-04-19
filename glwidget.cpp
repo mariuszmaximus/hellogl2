@@ -253,8 +253,16 @@ void GLWidget::setupVertexAttribs()
     m_logoVbo.release();
 }
 
+#define DRAW_2D_TEST
+
 void GLWidget::paintGL()
 {
+
+#ifdef DRAW_2D_TEST
+    QPainter painter(this);
+    painter.beginNativePainting();
+#endif
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -274,6 +282,13 @@ void GLWidget::paintGL()
     glDrawArrays(GL_TRIANGLES, 0, m_logo.vertexCount());
 
     m_program->release();
+
+#ifdef DRAW_2D_TEST
+    painter.endNativePainting();
+    painter.setPen(Qt::red);
+    painter.drawLine(rect().topLeft(), rect().bottomRight());
+    painter.drawLine(rect().bottomLeft(), rect().topRight());
+#endif
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -300,4 +315,13 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         setZRotation(m_zRot + 8 * dx);
     }
     m_lastPos = event->position().toPoint();
+}
+
+
+void GLWidget::SaveImg(QString &fileName)
+{
+    QPixmap pixmap(this->size());
+    this->render(&pixmap);
+    pixmap.save(fileName);
+    qDebug()<<"Save to file:"<<fileName;
 }
